@@ -46,10 +46,7 @@ import org.sonar.batch.debt.IssueChangelogDebtCalculator;
 import org.sonar.batch.debt.NewDebtDecorator;
 import org.sonar.batch.debt.SqaleRatingDecorator;
 import org.sonar.batch.debt.SqaleRatingSettings;
-import org.sonar.batch.issue.tracking.InitialOpenIssuesSensor;
-import org.sonar.batch.issue.tracking.IssueHandlers;
 import org.sonar.batch.issue.tracking.IssueTracking;
-import org.sonar.batch.issue.tracking.IssueTrackingDecorator;
 import org.sonar.batch.language.LanguageDistributionDecorator;
 import org.sonar.batch.scan.report.ConsoleReport;
 import org.sonar.batch.scan.report.HtmlReport;
@@ -99,11 +96,6 @@ public class BatchComponents {
       NewDebtDecorator.class,
       SqaleRatingDecorator.class,
       SqaleRatingSettings.class,
-
-      // Issue tracking
-      IssueTrackingDecorator.class,
-      IssueHandlers.class,
-      InitialOpenIssuesSensor.class,
 
       // to be moved to compute engine
       UnitTestDecorator.class,

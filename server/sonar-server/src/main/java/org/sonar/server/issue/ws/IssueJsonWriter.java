@@ -33,13 +33,13 @@ import org.sonar.api.i18n.I18n;
 import org.sonar.api.issue.ActionPlan;
 import org.sonar.api.issue.Issue;
 import org.sonar.api.issue.IssueComment;
-import org.sonar.api.issue.internal.DefaultIssueComment;
 import org.sonar.api.user.User;
 import org.sonar.api.utils.DateUtils;
 import org.sonar.api.utils.Duration;
 import org.sonar.api.utils.Durations;
 import org.sonar.api.utils.text.JsonWriter;
 import org.sonar.core.component.ComponentDto;
+import org.sonar.core.issue.DefaultIssueComment;
 import org.sonar.markdown.Markdown;
 import org.sonar.server.user.UserSession;
 
