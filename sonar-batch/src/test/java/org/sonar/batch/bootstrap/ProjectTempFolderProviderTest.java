@@ -19,19 +19,20 @@
  */
 package org.sonar.batch.bootstrap;
 
+import org.sonar.api.utils.ProjectTempFolder;
+
 import com.google.common.collect.ImmutableMap;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.CoreProperties;
-import org.sonar.api.utils.TempFolder;
 
 import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TempFolderProviderTest {
+public class ProjectTempFolderProviderTest {
 
   @Rule
   public ExpectedException throwable = ExpectedException.none();
@@ -42,8 +43,8 @@ public class TempFolderProviderTest {
   @Test
   public void createTempFolder() throws Exception {
     File workingDir = temp.newFolder();
-    TempFolderProvider tempFolderProvider = new TempFolderProvider();
-    TempFolder tempFolder = tempFolderProvider.provide(new BootstrapProperties(ImmutableMap.of(CoreProperties.WORKING_DIRECTORY, workingDir.getAbsolutePath())));
+    ProjectTempFolderProvider tempFolderProvider = new ProjectTempFolderProvider();
+    ProjectTempFolder tempFolder = tempFolderProvider.provide(new BootstrapProperties(ImmutableMap.of(CoreProperties.WORKING_DIRECTORY, workingDir.getAbsolutePath())));
     tempFolder.newDir();
     tempFolder.newFile();
     assertThat(new File(workingDir, ".sonartmp")).exists();

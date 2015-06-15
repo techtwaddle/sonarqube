@@ -85,7 +85,6 @@ public class Caches implements Startable {
 
     if (volume != null) {
       try {
-        System.out.println("DELETING VOLUME");
         volume.close();
         volume.delete();
       } catch (PersistitException e) {

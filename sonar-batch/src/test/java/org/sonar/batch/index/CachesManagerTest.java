@@ -19,19 +19,18 @@
  */
 package org.sonar.batch.index;
 
+import org.sonar.batch.bootstrap.TempFolderProvider;
+
 import com.google.common.collect.ImmutableMap;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.CoreProperties;
 import org.sonar.batch.bootstrap.BootstrapProperties;
-import org.sonar.batch.bootstrap.TempFolderProvider;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
