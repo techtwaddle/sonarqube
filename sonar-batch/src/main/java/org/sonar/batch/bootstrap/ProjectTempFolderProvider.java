@@ -31,14 +31,14 @@ import java.io.File;
 import java.io.IOException;
 
 public class ProjectTempFolderProvider extends ProviderAdapter {
-
+  static final String TMP_NAME = ".sonartmp";
   private ProjectTempFolder projectTempFolder;
 
   public ProjectTempFolder provide(BootstrapProperties bootstrapProps) {
     if (projectTempFolder == null) {
       String workingDirPath = StringUtils.defaultIfBlank(bootstrapProps.property(CoreProperties.WORKING_DIRECTORY), CoreProperties.WORKING_DIRECTORY_DEFAULT_VALUE);
       File workingDir = new File(workingDirPath).getAbsoluteFile();
-      File tempDir = new File(workingDir, ".sonartmp");
+      File tempDir = new File(workingDir, TMP_NAME);
       try {
         FileUtils.forceMkdir(tempDir);
       } catch (IOException e) {

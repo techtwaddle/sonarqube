@@ -19,35 +19,52 @@
  */
 package org.sonar.batch.bootstrap;
 
-import org.sonar.api.utils.ProjectTempFolder;
+import org.apache.commons.io.FileUtils;
 
+import org.sonar.api.utils.ProjectTempFolder;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.CoreProperties;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ProjectTempFolderProviderTest {
 
   @Rule
-  public ExpectedException throwable = ExpectedException.none();
-
-  @Rule
   public TemporaryFolder temp = new TemporaryFolder();
 
+  private ProjectTempFolderProvider tempFolderProvider = new ProjectTempFolderProvider();
+
   @Test
-  public void createTempFolder() throws Exception {
+  public void createTempFolderWithProps() throws Exception {
     File workingDir = temp.newFolder();
-    ProjectTempFolderProvider tempFolderProvider = new ProjectTempFolderProvider();
+    File tmpDir = new File(workingDir, ProjectTempFolderProvider.TMP_NAME);
+
     ProjectTempFolder tempFolder = tempFolderProvider.provide(new BootstrapProperties(ImmutableMap.of(CoreProperties.WORKING_DIRECTORY, workingDir.getAbsolutePath())));
     tempFolder.newDir();
     tempFolder.newFile();
-    assertThat(new File(workingDir, ".sonartmp")).exists();
-    assertThat(new File(workingDir, ".sonartmp").list()).hasSize(2);
+    assertThat(tmpDir).exists();
+    assertThat(tmpDir.list()).hasSize(2);
+  }
+
+  @Test
+  public void createTempFolder() throws IOException {
+    File defaultDir = new File(CoreProperties.WORKING_DIRECTORY_DEFAULT_VALUE, ProjectTempFolderProvider.TMP_NAME);
+
+    try {
+      ProjectTempFolder tempFolder = tempFolderProvider.provide(new BootstrapProperties(Collections.<String, String>emptyMap()));
+      tempFolder.newDir();
+      tempFolder.newFile();
+      assertThat(defaultDir).exists();
+      assertThat(defaultDir.list()).hasSize(2);
+    } finally {
+      FileUtils.deleteDirectory(defaultDir);
+    }
   }
 }

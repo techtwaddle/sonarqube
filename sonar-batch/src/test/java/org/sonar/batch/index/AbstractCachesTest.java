@@ -31,28 +31,29 @@ public abstract class AbstractCachesTest {
   public static TemporaryFolder temp = new TemporaryFolder();
 
   protected Caches caches;
-  protected static CachesManager cachesProvider;
+  protected static CachesManager cachesManager;
 
   @BeforeClass
   public static void startClass() {
-    cachesProvider = CachesManagerTest.createCacheOnTemp(temp);
-    cachesProvider.start();
+    cachesManager = CachesManagerTest.createCacheOnTemp(temp);
+    cachesManager.start();
   }
 
   @Before
   public void start() {
-    caches = new Caches(cachesProvider);
+    caches = new Caches(cachesManager);
     caches.start();
   }
 
   @After
   public void stop() {
-    System.out.println("STOPPING");
     caches.stop();
+    caches = null;
   }
 
   @AfterClass
   public static void stopClass() {
-    cachesProvider.stop();
+    cachesManager.stop();
+    cachesManager = null;
   }
 }

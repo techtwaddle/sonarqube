@@ -20,7 +20,6 @@
 package org.sonar.batch.bootstrap;
 
 import org.sonar.api.utils.TempFolder;
-
 import org.picocontainer.injectors.ProviderAdapter;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.CoreProperties;
@@ -32,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class TempFolderProvider extends ProviderAdapter {
+  static final String TMP_NAME = ".sonartmp";
   private TempFolder tempFolder;
 
   public TempFolder provide(BootstrapProperties bootstrapProps) {
@@ -45,7 +45,7 @@ public class TempFolderProvider extends ProviderAdapter {
         workingPath = home.resolve(workingPath).normalize();
       }
 
-      Path tempDir = workingPath.resolve(".sonartmp");
+      Path tempDir = workingPath.resolve(TMP_NAME);
       try {
         Files.createDirectories(tempDir);
       } catch (IOException e) {

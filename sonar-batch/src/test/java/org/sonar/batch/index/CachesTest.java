@@ -51,18 +51,41 @@ public class CachesTest extends AbstractCachesTest {
       c.put("a" + i, "a" + i);
     }
 
-    cachesProvider.persistit().flush();
     caches.stop();
 
-    assertThat(cachesProvider.persistit().isInitialized()).isTrue();
+    // manager continues up
+    assertThat(cachesManager.persistit().isInitialized()).isTrue();
 
-    this.start();
-    caches = new Caches(cachesProvider);
+    caches = new Caches(cachesManager);
     caches.start();
     caches.createCache("test1");
   }
 
+  @Test
+  public void leak_test() throws PersistitException {
+    caches.stop();
+
+    System.out.println(cachesManager.tempDir());
+
+    int len = 1 * 1024 * 1024;
+    StringBuilder sb = new StringBuilder(len);
+    for (int i = 0; i < len; i++) {
+      sb.append("a");
+    }
+
+    for (int i = 0; i < 3; i++) {
+      caches = new Caches(cachesManager);
+      caches.start();
+      Cache<String> c = caches.<String>createCache("test" + i);
+      c.put("key" + i, sb.toString());
+      cachesManager.persistit().flush();
+
+      caches.stop();
+    }
+  }
+
   private static class Element implements Serializable {
+    private static final long serialVersionUID = 1L;
 
   }
 }
