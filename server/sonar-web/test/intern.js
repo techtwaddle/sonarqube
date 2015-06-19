@@ -1,7 +1,12 @@
 define({
 
   environments: [
-    { browserName: 'firefox' }
+    { browserName: 'firefox' },
+    { browserName: 'chrome' },
+    { browserName: 'safari' },
+    { browserName: 'internet explorer', version: '9' },
+    { browserName: 'internet explorer', version: '10' },
+    { browserName: 'internet explorer', version: '11' }
   ],
 
   tunnel: 'BrowserStackTunnel',
