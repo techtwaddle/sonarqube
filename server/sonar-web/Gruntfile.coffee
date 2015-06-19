@@ -141,30 +141,6 @@ module.exports = (grunt) ->
           'requirejs:issuesContext'
           'requirejs:selectList'
         ]
-      casper:
-        tasks: [
-          'casper:apiDocumentation'
-          'casper:application'
-          'casper:codingRules'
-          'casper:issueFilterWidget'
-          'casper:handlebarsHelpers'
-          'casper:issues'
-          'casper:markdown'
-          'casper:nav'
-          'casper:process'
-          'casper:qualityGates'
-          'casper:qualityProfiles'
-          'casper:sourceViewer'
-          'casper:treemap'
-          'casper:ui'
-          'casper:workspace'
-          'casper:users'
-          'casper:groups'
-          'casper:provisioning'
-          'casper:computation'
-          'casper:metrics'
-          'casper:maintenance'
-        ]
 
 
     handlebars:
@@ -272,75 +248,6 @@ module.exports = (grunt) ->
           script: 'src/test/server.js'
 
 
-    casper:
-      options:
-        test: true
-        'fail-fast': true
-        concise: true
-        'no-colors': true
-        port: expressPort
-      testCoverageLight:
-        options:
-          concise: false
-          verbose: true
-          'no-colors': false
-        src: ['src/test/js/**/*<%= grunt.option("spec") %>*.js']
-      single:
-        options:
-          concise: false
-          verbose: true
-          'no-colors': false
-        src: ['src/test/js/<%= grunt.option("spec") %>-spec.js']
-      testfile:
-        options:
-          concise: false
-          verbose: true
-          'no-colors': false
-        src: ['<%= grunt.option("file") %>']
-
-      apiDocumentation:
-        src: ['src/test/js/api-documentation*.js']
-      application:
-        src: ['src/test/js/application*.js']
-      codingRules:
-        src: ['src/test/js/coding-rules*.js']
-      issueFilterWidget:
-        src: ['src/test/js/*issue-filter-widget*.js']
-      handlebarsHelpers:
-        src: ['src/test/js/handlebars-helpers*.js']
-      issues:
-        src: ['src/test/js/issues*.js']
-      markdown:
-        src: ['src/test/js/markdown*.js']
-      nav:
-        src: ['src/test/js/nav*.js']
-      process:
-        src: ['src/test/js/process*.js']
-      qualityGates:
-        src: ['src/test/js/quality-gates*.js']
-      qualityProfiles:
-        src: ['src/test/js/quality-profiles*.js']
-      sourceViewer:
-        src: ['src/test/js/source-viewer*.js']
-      treemap:
-        src: ['src/test/js/treemap*.js']
-      ui:
-        src: ['src/test/js/ui*.js']
-      workspace:
-        src: ['src/test/js/workspace*.js']
-      users:
-        src: ['src/test/js/users*.js']
-      provisioning:
-        src: ['src/test/js/provisioning*.js']
-      computation:
-        src: ['src/test/js/computation*.js']
-      groups:
-        src: ['src/test/js/groups-spec.js']
-      metrics:
-        src: ['src/test/js/metrics-spec.js']
-      maintenance:
-        src: ['src/test/js/maintenance-spec.js']
-
     uglify:
       build:
         src: '<%= ASSETS_PATH %>/js/sonar.js'
@@ -370,12 +277,6 @@ module.exports = (grunt) ->
         replacements: [
           { from: '/build/', to: '/src/main/' }
         ]
-
-
-#    mkdir:
-#      unit:
-#        options:
-#          create: ['target/web-tests/unit']
 
 
     rename:
@@ -477,15 +378,6 @@ module.exports = (grunt) ->
   # Development
   grunt.registerTask 'dw',
       ['build-fast', 'watch']
-
-  grunt.registerTask 'testCoverageLight',
-      ['prepare', 'express:testCoverage', 'curl:resetCoverage', 'casper:testCoverageLight', 'curl:downloadCoverage', 'unzip', 'replace:lcov']
-
-  grunt.registerTask 'single',
-      ['prepare', 'express:test', 'casper:single']
-
-  grunt.registerTask 'testfile',
-      ['prepare', 'express:test', 'casper:testfile']
 
   # tasks used by Maven build (see pom.xml)
   grunt.registerTask 'maven-quick-build',
