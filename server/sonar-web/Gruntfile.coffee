@@ -360,16 +360,41 @@ module.exports = (grunt) ->
 
 
     unzip:
-      'target/js-coverage': 'target/coverage.zip'
+      'target/web-tests/functional': 'target/coverage.zip'
 
 
     replace:
       lcov:
-        src: 'target/js-coverage/lcov.info'
-        dest: 'target/js-coverage/lcov.info'
+        src: 'target/web-tests/functional/lcov.info'
+        dest: 'target/web-tests/functional/lcov.info'
         replacements: [
           { from: '/build/', to: '/src/main/' }
         ]
+
+
+#    mkdir:
+#      unit:
+#        options:
+#          create: ['target/web-tests/unit']
+
+
+    rename:
+      lcovUnit:
+        src: 'lcov.info'
+        dest: 'target/web-tests/unit/lcov.info'
+
+
+    intern:
+      test:
+        options:
+          runType: 'runner'
+          config: 'test/intern'
+          excludeInstrumentation: true
+          reporters: ['Runner']
+      coverage:
+        options:
+          runType: 'runner'
+          config: 'test/intern'
 
 
     jshint:
@@ -413,11 +438,11 @@ module.exports = (grunt) ->
       ['copy:assets-css', 'copy:assets-js', 'concurrent:build']
 
   grunt.registerTask 'test-suffix',
-      ['express:test', 'concurrent:casper']
+      ['express:test', 'intern:test']
 
   grunt.registerTask 'coverage-suffix',
-      ['express:testCoverage', 'curl:resetCoverage', 'concurrent:casper', 'curl:downloadCoverage', 'unzip',
-       'replace:lcov']
+      ['express:testCoverage', 'curl:resetCoverage', 'intern:coverage', 'curl:downloadCoverage', 'unzip',
+       'replace:lcov', 'rename:lcovUnit']
 
   grunt.registerTask 'build-app', (app) ->
     grunt.option 'app', app

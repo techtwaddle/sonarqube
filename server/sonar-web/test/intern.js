@@ -10,7 +10,8 @@ define({
 
   reporters: [
     { id: 'Runner' },
-    { id: 'LcovHtml', directory: 'target/js/lcov' }
+    { id: 'Lcov' },
+    { id: 'LcovHtml', directory: 'target/web-tests/unit' }
   ],
 
   suites: [

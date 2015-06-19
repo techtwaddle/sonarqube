@@ -59,12 +59,12 @@ define(function (require) {
             assert.equal(3, elements.length);
           })
           .end()
-          //.findByCssSelector('#users-list-footer')
-          //.getVisibleText()
-          //.then(function (text) {
-          //  assert.include(text, '3/3');
-          //})
-          //.end()
+        //.findByCssSelector('#users-list-footer')
+        //.getVisibleText()
+        //.then(function (text) {
+        //  assert.include(text, '3/3');
+        //})
+        //.end()
           .findByCssSelector('[data-login="ryan"]')
           .getVisibleText()
           .then(function (text) {
@@ -94,7 +94,19 @@ define(function (require) {
           .then(function (text) {
             assert.include(text, 'four');
           })
-          .end();
+          .end()
+          .execute(function () {
+            if (window.__coverage__) {
+              jQuery.ajax({
+                type: 'POST',
+                url: '/coverage/client',
+                data: JSON.stringify(window.__coverage__),
+                processData: false,
+                contentType: 'application/json; charset=UTF-8',
+                async: false
+              });
+            }
+          });
     });
 
   });
