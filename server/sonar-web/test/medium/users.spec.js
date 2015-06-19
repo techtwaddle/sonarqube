@@ -1,7 +1,11 @@
 define(function (require) {
+  var intern = require('intern');
   var bdd = require('intern!bdd');
   var assert = require('intern/chai!assert');
   var fs = require('intern/dojo/node!fs');
+
+  var serverPort = intern.args.port,
+      serverUrl = 'http://localhost:' + serverPort + '/pages/base';
 
   bdd.describe('Users Page', function () {
 
@@ -9,7 +13,7 @@ define(function (require) {
       var searchResponse = fs.readFileSync('src/test/json/users-spec/search.json', 'utf-8');
 
       return this.remote
-          .get('http://localhost:3000/pages/base')
+          .get(serverUrl)
           .setFindTimeout(5000)
           .findByCssSelector('#content')
           .execute(function (searchResponse) {
