@@ -1,10 +1,10 @@
 define({
 
   environments: [
-    { browserName: 'firefox', tunnelIdentifier: process.env['TRAVIS_JOB_NUMBER'] }
+    { browserName: 'firefox' }
   ],
 
-  tunnel: 'SauceLabsTunnel',
+  tunnel: 'BrowserStackTunnel',
 
   excludeInstrumentation: /(test|third-party|node_modules)\//,
 

@@ -10,9 +10,6 @@ env:
   - DATABASE=POSTGRES
   - DATABASE=MYSQL
 
-before_install:
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_4444.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :4444 -ac -screen 0 1280x1024x16"
-
 script:
   - ./travis.sh
 
