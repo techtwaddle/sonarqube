@@ -6,7 +6,7 @@ module.exports = (grunt) ->
   });
   require('time-grunt')(grunt);
 
-  expressPort = '<%= grunt.option("port") || 3000 %>'
+  expressPort = 3000 #'<%= grunt.option("port") || 3000 %>'
 
   grunt.initConfig
     pkg: grunt.file.readJSON('package.json')
