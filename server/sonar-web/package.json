@@ -22,6 +22,7 @@
     "grunt-express-server": "0.4.17",
     "grunt-text-replace": "0.4.0",
     "grunt-zip": "0.16.2",
+    "intern": "^3.0.0-rc.1",
     "istanbul": "0.3.5",
     "istanbul-middleware": "0.2.0",
     "jade": "1.4.2",
