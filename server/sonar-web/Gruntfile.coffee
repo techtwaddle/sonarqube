@@ -6,6 +6,7 @@ module.exports = (grunt) ->
   });
   require('time-grunt')(grunt);
 
+  useBrowserStack = !!process.env['BROWSERSTACK_USERNAME'] && !!process.env['BROWSERSTACK_ACCESS_KEY']
   expressPort = '<%= grunt.option("port") || 3000 %>'
   internPort = '<%= grunt.option("internPort") || 9100 %>'
 
@@ -287,19 +288,18 @@ module.exports = (grunt) ->
 
 
     intern:
+      options:
+        runType: 'runner'
+        config: 'test/intern'
+        port: expressPort
+        proxyPort: internPort
+        proxyUrl: 'http://localhost:' + internPort + '/'
+        useBrowserStack: useBrowserStack
       test:
         options:
-          runType: 'runner'
-          config: 'test/intern'
-          excludeInstrumentation: true
           reporters: ['Runner']
-          port: expressPort
-          proxyPort: internPort
-          proxyUrl: 'http://localhost:' + internPort + '/'
       coverage:
-        options:
-          runType: 'runner'
-          config: 'test/intern'
+        options: {}
 
 
     jshint:

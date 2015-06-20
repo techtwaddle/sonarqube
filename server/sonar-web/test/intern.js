@@ -1,30 +1,30 @@
-define({
+/* jshint node:true */
+define(['intern'], function (intern) {
+  var useBrowserStack = intern.args.useBrowserStack,
+      tunnel = useBrowserStack ? 'BrowserStackTunnel' : 'NullTunnel';
 
-  environments: [
-    { browserName: 'firefox' },
-    { browserName: 'chrome' },
-    { browserName: 'safari' },
-    { browserName: 'internet explorer', version: '9' },
-    { browserName: 'internet explorer', version: '10' },
-    { browserName: 'internet explorer', version: '11' }
-  ],
+  return {
+    excludeInstrumentation: /(test|third-party|node_modules)\//,
 
-  tunnel: 'BrowserStackTunnel',
+    defaultTimeout: 60 * 1000,
 
-  excludeInstrumentation: /(test|third-party|node_modules)\//,
+    reporters: [
+      { id: 'Runner' },
+      { id: 'Lcov' },
+      { id: 'LcovHtml', directory: 'target/web-tests/unit' }
+    ],
 
-  reporters: [
-    { id: 'Runner' },
-    { id: 'Lcov' },
-    { id: 'LcovHtml', directory: 'target/web-tests/unit' }
-  ],
+    suites: [
+      'test/unit/application.spec'
+    ],
 
-  suites: [
-    'test/unit/application.spec'
-  ],
+    functionalSuites: [
+      'test/medium/users.spec'
+    ],
 
-  functionalSuites: [
-    'test/medium/users.spec'
-  ]
-
+    tunnel: tunnel,
+    environments: [
+      { browserName: 'firefox' }
+    ]
+  };
 });
