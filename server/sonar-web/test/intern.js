@@ -11,7 +11,7 @@ define(['intern'], function (intern) {
     reporters: [
       { id: 'Runner' },
       { id: 'Lcov' },
-      { id: 'LcovHtml', directory: 'target/web-tests/unit' }
+      { id: 'LcovHtml', directory: 'target/web-tests' }
     ],
 
     suites: [

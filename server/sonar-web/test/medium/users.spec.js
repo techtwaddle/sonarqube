@@ -13,9 +13,12 @@ define(function (require) {
       var searchResponse = fs.readFileSync('src/test/json/users-spec/search.json', 'utf-8');
 
       return this.remote
-          .get(serverUrl)
+          .get(require.toUrl('test/medium/base.html'))
           .setFindTimeout(5000)
           .findByCssSelector('#content')
+          .execute(function () {
+            return jQuery.mockjax(_.extend({ url: '/api/l10n/index', responseText: {} }));
+          })
           .execute(function (searchResponse) {
             return jQuery.mockjax(_.extend({ url: '/api/users/search', responseText: searchResponse }));
           }, [searchResponse])

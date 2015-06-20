@@ -2,24 +2,24 @@ define(function (require) {
   var bdd = require('intern!bdd');
   var assert = require('intern/chai!assert');
 
-  //require('intern/order!src/main/js/libs/translate.js');
-  require('intern/order!src/main/js/libs/third-party/jquery.js');
-  //require('intern/order!src/main/js/libs/third-party/jquery-ui.js');
-  //require('intern/order!src/main/js/libs/third-party/d3.js');
-  //require('intern/order!src/main/js/libs/third-party/latinize.js');
-  require('intern/order!src/main/js/libs/third-party/underscore.js');
-  //require('intern/order!src/main/js/libs/third-party/backbone.js');
-  //require('intern/order!src/main/js/libs/third-party/handlebars.js');
-  //require('intern/order!src/main/js/libs/third-party/select2.js');
-  require('intern/order!src/main/js/libs/third-party/keymaster.js');
-  //require('intern/order!src/main/js/libs/third-party/moment.js');
-  //require('intern/order!src/main/js/libs/third-party/numeral.js');
-  //require('intern/order!src/main/js/libs/third-party/numeral-languages.js');
-  //require('intern/order!src/main/js/libs/third-party/bootstrap/tooltip.js');
-  //require('intern/order!src/main/js/libs/third-party/bootstrap/dropdown.js');
-  //require('intern/order!src/main/js/libs/third-party/md5.js');
-  //require('intern/order!src/main/js/libs/select2-jquery-ui-fix.js');
-  require('intern/order!src/main/js/libs/application.js');
+  //require('intern/order!build/js/libs/translate.js');
+  require('intern/order!build/js/libs/third-party/jquery.js');
+  //require('intern/order!build/js/libs/third-party/jquery-ui.js');
+  //require('intern/order!build/js/libs/third-party/d3.js');
+  //require('intern/order!build/js/libs/third-party/latinize.js');
+  require('intern/order!build/js/libs/third-party/underscore.js');
+  //require('intern/order!build/js/libs/third-party/backbone.js');
+  //require('intern/order!build/js/libs/third-party/handlebars.js');
+  //require('intern/order!build/js/libs/third-party/select2.js');
+  require('intern/order!build/js/libs/third-party/keymaster.js');
+  //require('intern/order!build/js/libs/third-party/moment.js');
+  //require('intern/order!build/js/libs/third-party/numeral.js');
+  //require('intern/order!build/js/libs/third-party/numeral-languages.js');
+  //require('intern/order!build/js/libs/third-party/bootstrap/tooltip.js');
+  //require('intern/order!build/js/libs/third-party/bootstrap/dropdown.js');
+  //require('intern/order!build/js/libs/third-party/md5.js');
+  //require('intern/order!build/js/libs/select2-jquery-ui-fix.js');
+  require('intern/order!build/js/libs/application.js');
 
   bdd.describe('Application', function () {
 

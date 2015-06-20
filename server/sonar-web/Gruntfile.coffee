@@ -1,6 +1,5 @@
 module.exports = (grunt) ->
   require('jit-grunt')(grunt, {
-    express: 'grunt-express-server'
     unzip: 'grunt-zip'
     replace: 'grunt-text-replace'
   });
@@ -235,71 +234,35 @@ module.exports = (grunt) ->
         src: '<%= BUILD_PATH %>/css/sonar.css', dest: '<%= ASSETS_PATH %>/css/sonar.css'
 
 
-    express:
-      test:
-        options:
-          script: 'src/test/server.js'
-          port: expressPort
-      testCoverage:
-        options:
-          script: 'src/test/server-coverage.js'
-          port: expressPort
-      dev:
-        options:
-          background: false
-          script: 'src/test/server.js'
-
-
     uglify:
       build:
         src: '<%= ASSETS_PATH %>/js/sonar.js'
         dest: '<%= ASSETS_PATH %>/js/sonar.js'
 
 
-    curl:
-      resetCoverage:
-        src:
-          url: 'http://localhost:' + expressPort + '/coverage/reset'
-          method: 'POST'
-        dest: 'target/reset_coverage.dump'
-
-      downloadCoverage:
-        src: 'http://localhost:' + expressPort + '/coverage/download'
-        dest: 'target/coverage.zip'
-
-
-    unzip:
-      'target/web-tests/functional': 'target/coverage.zip'
-
-
     replace:
       lcov:
-        src: 'target/web-tests/functional/lcov.info'
-        dest: 'target/web-tests/functional/lcov.info'
+        src: 'target/web-tests/lcov.info'
+        dest: 'target/web-tests/lcov.info'
         replacements: [
           { from: '/build/', to: '/src/main/' }
         ]
 
 
     rename:
-      lcovUnit:
+      lcov:
         src: 'lcov.info'
-        dest: 'target/web-tests/unit/lcov.info'
+        dest: 'target/web-tests/lcov.info'
 
 
     intern:
-      options:
-        runType: 'runner'
-        config: 'test/intern'
-        port: expressPort
-        proxyPort: internPort
-        proxyUrl: 'http://localhost:' + internPort + '/'
-        useBrowserStack: useBrowserStack
       test:
         options:
-          reporters: ['Runner']
-      coverage:
-        options: {}
+          runType: 'runner'
+          config: 'test/intern'
+          proxyPort: expressPort
+          proxyUrl: 'http://localhost:' + expressPort + '/'
+          useBrowserStack: useBrowserStack
 
 
     jshint:
@@ -343,11 +306,10 @@ module.exports = (grunt) ->
       ['copy:assets-css', 'copy:assets-js', 'concurrent:build']
 
   grunt.registerTask 'test-suffix',
-      ['express:test', 'intern:test']
+      ['intern:test', 'rename:lcov', 'replace:lcov']
 
   grunt.registerTask 'coverage-suffix',
-      ['express:testCoverage', 'curl:resetCoverage', 'intern:coverage', 'curl:downloadCoverage', 'unzip',
-       'replace:lcov', 'rename:lcovUnit']
+      ['test-suffix']
 
   grunt.registerTask 'build-app', (app) ->
     grunt.option 'app', app
