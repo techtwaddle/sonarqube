@@ -22,6 +22,3 @@ before_cache:
 
 notifications:
   email: false
-
-addons:
-  sauce_connect: true
