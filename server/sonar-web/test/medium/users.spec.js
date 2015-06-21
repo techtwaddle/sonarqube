@@ -4,9 +4,6 @@ define(function (require) {
   var assert = require('intern/chai!assert');
   var fs = require('intern/dojo/node!fs');
 
-  var serverPort = intern.args.port,
-      serverUrl = 'http://localhost:' + serverPort + '/pages/base';
-
   bdd.describe('Users Page', function () {
 
     bdd.it('should show list of users', function () {
@@ -100,19 +97,6 @@ define(function (require) {
           .getVisibleText()
           .then(function (text) {
             assert.include(text, 'four');
-          })
-          .end()
-          .execute(function () {
-            if (window.__coverage__) {
-              jQuery.ajax({
-                type: 'POST',
-                url: '/coverage/client',
-                data: JSON.stringify(window.__coverage__),
-                processData: false,
-                contentType: 'application/json; charset=UTF-8',
-                async: false
-              });
-            }
           });
     });
 
