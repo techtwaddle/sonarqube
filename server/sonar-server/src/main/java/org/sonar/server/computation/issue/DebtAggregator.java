@@ -26,7 +26,6 @@ import javax.annotation.CheckForNull;
 import javax.annotation.Nullable;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.core.issue.DefaultIssue;
-import org.sonar.core.issue.IssueUpdater;
 import org.sonar.core.issue.tracking.Tracking;
 import org.sonar.core.rule.RuleDto;
 import org.sonar.server.computation.component.Component;
@@ -39,9 +38,8 @@ import org.sonar.server.computation.metric.MetricRepository;
 
 import static com.google.common.collect.Maps.newHashMap;
 
-public class DebtCalculator extends IssueVisitor {
+public class DebtAggregator extends IssueVisitor {
 
-  private final IssueUpdater updater;
   private final RuleCache ruleCache;
   private final DebtModelHolder debtModelHolder;
   private final MetricRepository metricRepository;
@@ -50,9 +48,8 @@ public class DebtCalculator extends IssueVisitor {
   private final Map<Integer, Debt> debtsByComponentRef = new HashMap<>();
   private Debt currentDebt;
 
-  public DebtCalculator(IssueUpdater updater, RuleCache ruleCache, DebtModelHolder debtModelHolder,
+  public DebtAggregator(RuleCache ruleCache, DebtModelHolder debtModelHolder,
     MetricRepository metricRepository, MeasureRepository measureRepository) {
-    this.updater = updater;
     this.ruleCache = ruleCache;
     this.debtModelHolder = debtModelHolder;
     this.metricRepository = metricRepository;
@@ -74,7 +71,6 @@ public class DebtCalculator extends IssueVisitor {
   @Override
   public void onIssue(Component component, DefaultIssue issue) {
     if (issue.resolution() == null) {
-      // TODO calculate debt according to rule remediation function. Currently done by batch.
       currentDebt.add(issue);
     }
   }
