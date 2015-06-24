@@ -19,6 +19,8 @@
  */
 package org.sonar.batch.scan.measure;
 
+import java.util.Date;
+import java.util.Iterator;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.junit.After;
 import org.junit.Before;
@@ -44,9 +46,6 @@ import org.sonar.api.technicaldebt.batch.internal.DefaultCharacteristic;
 import org.sonar.batch.index.Cache.Entry;
 import org.sonar.batch.index.Caches;
 import org.sonar.batch.index.CachesTest;
-
-import java.util.Date;
-import java.util.Iterator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -105,9 +104,6 @@ public class MeasureCacheTest {
     assertThat(cache.byResource(p)).hasSize(1);
     assertThat(cache.byResource(p).iterator().next()).isEqualTo(m);
 
-    Measure mRule = RuleMeasure.createForPriority(CoreMetrics.CRITICAL_VIOLATIONS, RulePriority.BLOCKER, 1.0);
-    cache.put(p, mRule);
-
     assertThat(cache.entries()).hasSize(2);
 
     assertThat(cache.byResource(p)).hasSize(2);
@@ -141,10 +137,6 @@ public class MeasureCacheTest {
 
     assertThat(cache.byResource(p)).hasSize(1);
     assertThat(cache.byResource(p).iterator().next()).isEqualTo(m);
-
-    RuleMeasure mRule = RuleMeasure.createForPriority(CoreMetrics.CRITICAL_VIOLATIONS, RulePriority.BLOCKER, 1.0);
-    mRule.setRuleKey(RuleKey.of("repo", "rule"));
-    cache.put(p, mRule);
 
     assertThat(cache.entries()).hasSize(2);
   }
@@ -180,11 +172,7 @@ public class MeasureCacheTest {
     assertThat(cache.byResource(p)).hasSize(1);
     assertThat(cache.byResource(p).iterator().next()).isEqualTo(m);
 
-    RuleMeasure mRule = RuleMeasure.createForPriority(CoreMetrics.CRITICAL_VIOLATIONS, RulePriority.BLOCKER, 1.0);
-    mRule.setRuleKey(RuleKey.of("repo", "rule"));
-    cache.put(p, mRule);
-
-    assertThat(cache.entries()).hasSize(2);
+    assertThat(cache.entries()).hasSize(1);
   }
 
   @Test
