@@ -23,34 +23,34 @@ import org.sonar.core.issue.DefaultIssue;
 import org.sonar.core.issue.tracking.Tracking;
 import org.sonar.server.computation.component.Component;
 
-public class IssueListeners {
+public class IssueVisitors {
 
-  private final IssueListener[] listeners;
+  private final IssueVisitor[] listeners;
 
-  public IssueListeners(IssueListener[] listeners) {
+  public IssueVisitors(IssueVisitor[] listeners) {
     this.listeners = listeners;
   }
 
   public void beforeComponent(Component component, Tracking tracking) {
-    for (IssueListener listener : listeners) {
+    for (IssueVisitor listener : listeners) {
       listener.beforeComponent(component, tracking);
     }
   }
 
   public void onOpenIssueInitialization(Component component, DefaultIssue issue) {
-    for (IssueListener listener : listeners) {
+    for (IssueVisitor listener : listeners) {
       listener.onOpenIssueInitialization(component, issue);
     }
   }
 
   public void onIssue(Component component, DefaultIssue issue) {
-    for (IssueListener listener : listeners) {
+    for (IssueVisitor listener : listeners) {
       listener.onIssue(component, issue);
     }
   }
 
   public void afterComponent(Component component) {
-    for (IssueListener listener : listeners) {
+    for (IssueVisitor listener : listeners) {
       listener.afterComponent(component);
     }
   }

@@ -31,7 +31,7 @@ import org.sonar.server.computation.component.TreeRootHolder;
 import org.sonar.server.computation.issue.BaseIssuesLoader;
 import org.sonar.server.computation.issue.IssueCache;
 import org.sonar.server.computation.issue.IssueLifecycle;
-import org.sonar.server.computation.issue.IssueListeners;
+import org.sonar.server.computation.issue.IssueVisitors;
 import org.sonar.server.computation.issue.TrackerExecution;
 import org.sonar.server.util.cache.DiskCache;
 
@@ -44,11 +44,11 @@ public class IntegrateIssuesStep implements ComputationStep {
   private final IssueCache issueCache;
   private final BaseIssuesLoader baseIssuesLoader;
   private final IssueLifecycle issueLifecycle;
-  private final IssueListeners issueListeners;
+  private final IssueVisitors issueListeners;
 
   public IntegrateIssuesStep(TreeRootHolder treeRootHolder, TrackerExecution tracker, IssueCache issueCache,
     BaseIssuesLoader baseIssuesLoader, IssueLifecycle issueLifecycle,
-    IssueListeners issueListeners) {
+    IssueVisitors issueListeners) {
     this.treeRootHolder = treeRootHolder;
     this.tracker = tracker;
     this.issueCache = issueCache;

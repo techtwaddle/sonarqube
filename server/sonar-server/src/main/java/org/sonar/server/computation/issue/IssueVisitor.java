@@ -23,7 +23,7 @@ import org.sonar.core.issue.DefaultIssue;
 import org.sonar.core.issue.tracking.Tracking;
 import org.sonar.server.computation.component.Component;
 
-public abstract class IssueListener {
+public abstract class IssueVisitor {
 
   /**
    * This method is called for each component before processing its issues.

@@ -44,13 +44,13 @@ import org.sonar.server.computation.component.TreeRootHolderImpl;
 import org.sonar.server.computation.debt.DebtModelHolderImpl;
 import org.sonar.server.computation.event.EventRepositoryImpl;
 import org.sonar.server.computation.issue.BaseIssuesLoader;
-import org.sonar.server.computation.issue.CountIssuesListener;
+import org.sonar.server.computation.issue.CountIssuesVisitor;
 import org.sonar.server.computation.issue.DebtCalculator;
 import org.sonar.server.computation.issue.DefaultAssignee;
 import org.sonar.server.computation.issue.IssueAssigner;
 import org.sonar.server.computation.issue.IssueCache;
 import org.sonar.server.computation.issue.IssueLifecycle;
-import org.sonar.server.computation.issue.IssueListeners;
+import org.sonar.server.computation.issue.IssueVisitors;
 import org.sonar.server.computation.issue.RuleCache;
 import org.sonar.server.computation.issue.RuleCacheLoader;
 import org.sonar.server.computation.issue.RuleTagsCopier;
@@ -167,9 +167,9 @@ public class ComputeEngineContainerImpl extends ComponentContainer implements Co
       IssueCache.class,
       DefaultAssignee.class,
       DebtCalculator.class,
-      IssueListeners.class,
+      IssueVisitors.class,
       IssueLifecycle.class,
-      CountIssuesListener.class,
+      CountIssuesVisitor.class,
       UpdateConflictResolver.class,
       TrackerBaseInputFactory.class,
       TrackerRawInputFactory.class,

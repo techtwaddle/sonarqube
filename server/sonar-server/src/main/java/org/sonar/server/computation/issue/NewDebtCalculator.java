@@ -22,7 +22,7 @@ package org.sonar.server.computation.issue;
 import org.sonar.core.issue.DefaultIssue;
 import org.sonar.server.computation.component.Component;
 
-public class NewDebtCalculator extends IssueListener {
+public class NewDebtCalculator extends IssueVisitor {
 
   @Override
   public void onIssue(Component component, DefaultIssue issue) {

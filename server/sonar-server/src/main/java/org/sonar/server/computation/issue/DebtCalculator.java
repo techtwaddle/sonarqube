@@ -39,7 +39,7 @@ import org.sonar.server.computation.metric.MetricRepository;
 
 import static com.google.common.collect.Maps.newHashMap;
 
-public class DebtCalculator extends IssueListener {
+public class DebtCalculator extends IssueVisitor {
 
   private final IssueUpdater updater;
   private final RuleCache ruleCache;
