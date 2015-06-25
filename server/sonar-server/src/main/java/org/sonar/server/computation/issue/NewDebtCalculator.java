@@ -19,14 +19,34 @@
  */
 package org.sonar.server.computation.issue;
 
+import java.util.Arrays;
 import org.sonar.core.issue.DefaultIssue;
+import org.sonar.core.issue.tracking.Tracking;
 import org.sonar.server.computation.component.Component;
+import org.sonar.server.computation.period.PeriodsHolder;
 
 public class NewDebtCalculator extends IssueVisitor {
+
+  private final PeriodsHolder periodsHolder;
+  private Double[] currentVariations = new Double[PeriodsHolder.MAX_NUMBER_OF_PERIODS];
+
+  public NewDebtCalculator(PeriodsHolder periodsHolder) {
+    this.periodsHolder = periodsHolder;
+  }
+
+  @Override
+  public void beforeComponent(Component component, Tracking tracking) {
+    Arrays.fill(currentVariations, null);
+  }
 
   @Override
   public void onIssue(Component component, DefaultIssue issue) {
     // TODO
+  }
+
+  @Override
+  public void afterComponent(Component component) {
+    super.afterComponent(component);
   }
 
 }
