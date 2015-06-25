@@ -64,7 +64,9 @@ public class DebtAggregator extends IssueVisitor {
     for (Component child : component.getChildren()) {
       // no need to keep the children in memory. They can be garbage-collected.
       Debt childDebt = debtsByComponentRef.remove(child.getRef());
-      currentDebt.add(childDebt);
+      if (childDebt != null) {
+        currentDebt.add(childDebt);
+      }
     }
   }
 
@@ -113,11 +115,14 @@ public class DebtAggregator extends IssueVisitor {
         RuleDto rule = ruleCache.get(issue.ruleKey());
         this.minutesByRuleId.add(rule.getId(), issueMinutes);
 
-        Characteristic characteristic = debtModelHolder.getCharacteristicById(rule.getSubCharacteristicId());
-        this.minutesByCharacteristicId.add(characteristic.getId(), issueMinutes);
-        Integer characteristicParentId = characteristic.getParentId();
-        if (characteristicParentId != null) {
-          this.minutesByCharacteristicId.add(characteristicParentId, issueMinutes);
+        Integer subCharacteristicId = rule.getSubCharacteristicId();
+        if (subCharacteristicId != null) {
+          Characteristic characteristic = debtModelHolder.getCharacteristicById(subCharacteristicId);
+          this.minutesByCharacteristicId.add(characteristic.getId(), issueMinutes);
+          Integer characteristicParentId = characteristic.getParentId();
+          if (characteristicParentId != null) {
+            this.minutesByCharacteristicId.add(characteristicParentId, issueMinutes);
+          }
         }
       }
     }

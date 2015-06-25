@@ -25,33 +25,27 @@ import org.sonar.server.computation.component.Component;
 
 public class IssueVisitors {
 
-  private final IssueVisitor[] listeners;
+  private final IssueVisitor[] visitors;
 
-  public IssueVisitors(IssueVisitor[] listeners) {
-    this.listeners = listeners;
+  public IssueVisitors(IssueVisitor[] visitors) {
+    this.visitors = visitors;
   }
 
   public void beforeComponent(Component component, Tracking tracking) {
-    for (IssueVisitor listener : listeners) {
-      listener.beforeComponent(component, tracking);
-    }
-  }
-
-  public void onOpenIssueInitialization(Component component, DefaultIssue issue) {
-    for (IssueVisitor listener : listeners) {
-      listener.onOpenIssueInitialization(component, issue);
+    for (IssueVisitor visitor : visitors) {
+      visitor.beforeComponent(component, tracking);
     }
   }
 
   public void onIssue(Component component, DefaultIssue issue) {
-    for (IssueVisitor listener : listeners) {
-      listener.onIssue(component, issue);
+    for (IssueVisitor visitor : visitors) {
+      visitor.onIssue(component, issue);
     }
   }
 
   public void afterComponent(Component component) {
-    for (IssueVisitor listener : listeners) {
-      listener.afterComponent(component);
+    for (IssueVisitor visitor : visitors) {
+      visitor.afterComponent(component);
     }
   }
 }

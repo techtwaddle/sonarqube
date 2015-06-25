@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 import javax.annotation.Nonnull;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.api.rule.RuleKey;
 
 import static com.google.common.collect.FluentIterable.from;
@@ -135,7 +136,7 @@ public class Tracker<RAW extends Trackable, BASE extends Trackable> {
     LineAndLineHashKey(Trackable trackable) {
       this.ruleKey = trackable.getRuleKey();
       this.line = trackable.getLine();
-      this.lineHash = trackable.getLineHash();
+      this.lineHash = StringUtils.defaultString(trackable.getLineHash(), "");
     }
 
     @Override
@@ -178,7 +179,7 @@ public class Tracker<RAW extends Trackable, BASE extends Trackable> {
     LineHashAndMessageKey(Trackable trackable) {
       this.ruleKey = trackable.getRuleKey();
       this.message = trackable.getMessage();
-      this.lineHash = trackable.getLineHash();
+      this.lineHash = StringUtils.defaultString(trackable.getLineHash(), "");
     }
 
     @Override

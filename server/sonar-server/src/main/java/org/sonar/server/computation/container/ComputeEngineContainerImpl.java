@@ -44,13 +44,15 @@ import org.sonar.server.computation.component.TreeRootHolderImpl;
 import org.sonar.server.computation.debt.DebtModelHolderImpl;
 import org.sonar.server.computation.event.EventRepositoryImpl;
 import org.sonar.server.computation.issue.BaseIssuesLoader;
-import org.sonar.server.computation.issue.CountIssuesVisitor;
+import org.sonar.server.computation.issue.IssueCounter;
 import org.sonar.server.computation.issue.DebtAggregator;
 import org.sonar.server.computation.issue.DefaultAssignee;
 import org.sonar.server.computation.issue.IssueAssigner;
 import org.sonar.server.computation.issue.IssueCache;
 import org.sonar.server.computation.issue.IssueLifecycle;
 import org.sonar.server.computation.issue.IssueVisitors;
+import org.sonar.server.computation.issue.NewDebtAggregator;
+import org.sonar.server.computation.issue.NewDebtCalculator;
 import org.sonar.server.computation.issue.RuleCache;
 import org.sonar.server.computation.issue.RuleCacheLoader;
 import org.sonar.server.computation.issue.RuleTagsCopier;
@@ -160,16 +162,21 @@ public class ComputeEngineContainerImpl extends ComponentContainer implements Co
       // issues
       ScmAccountToUserLoader.class,
       ScmAccountToUser.class,
-      IssueAssigner.class,
-      RuleTagsCopier.class,
       RuleCache.class,
       RuleCacheLoader.class,
       IssueCache.class,
       DefaultAssignee.class,
-      DebtAggregator.class,
       IssueVisitors.class,
       IssueLifecycle.class,
-      CountIssuesVisitor.class,
+
+      // order is important, NewDebtAggregator is based on DebtAggregator (new debt requires debt)
+      DebtAggregator.class,
+      NewDebtCalculator.class,
+      NewDebtAggregator.class,
+      IssueAssigner.class,
+      RuleTagsCopier.class,
+      IssueCounter.class,
+
       UpdateConflictResolver.class,
       TrackerBaseInputFactory.class,
       TrackerRawInputFactory.class,

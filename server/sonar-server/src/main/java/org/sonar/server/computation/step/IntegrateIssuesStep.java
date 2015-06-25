@@ -44,17 +44,17 @@ public class IntegrateIssuesStep implements ComputationStep {
   private final IssueCache issueCache;
   private final BaseIssuesLoader baseIssuesLoader;
   private final IssueLifecycle issueLifecycle;
-  private final IssueVisitors issueListeners;
+  private final IssueVisitors issueVisitors;
 
   public IntegrateIssuesStep(TreeRootHolder treeRootHolder, TrackerExecution tracker, IssueCache issueCache,
     BaseIssuesLoader baseIssuesLoader, IssueLifecycle issueLifecycle,
-    IssueVisitors issueListeners) {
+    IssueVisitors issueVisitors) {
     this.treeRootHolder = treeRootHolder;
     this.tracker = tracker;
     this.issueCache = issueCache;
     this.baseIssuesLoader = baseIssuesLoader;
     this.issueLifecycle = issueLifecycle;
-    this.issueListeners = issueListeners;
+    this.issueVisitors = issueVisitors;
   }
 
   @Override
@@ -77,11 +77,11 @@ public class IntegrateIssuesStep implements ComputationStep {
     Tracking<DefaultIssue, DefaultIssue> tracking = tracker.track(component);
     DiskCache<DefaultIssue>.DiskAppender cacheAppender = issueCache.newAppender();
     try {
-      issueListeners.beforeComponent(component, tracking);
+      issueVisitors.beforeComponent(component, tracking);
       fillNewOpenIssues(component, tracking, cacheAppender);
       fillExistingOpenIssues(component, tracking, cacheAppender);
       closeUnmatchedBaseIssues(component, tracking, cacheAppender);
-      issueListeners.afterComponent(component);
+      issueVisitors.afterComponent(component);
     } finally {
       cacheAppender.close();
     }
@@ -91,7 +91,6 @@ public class IntegrateIssuesStep implements ComputationStep {
     Set<DefaultIssue> issues = tracking.getUnmatchedRaws();
     for (DefaultIssue issue : issues) {
       issueLifecycle.initNewOpenIssue(issue);
-      issueListeners.onOpenIssueInitialization(component, issue);
       process(component, issue, cacheAppender);
     }
   }
@@ -100,7 +99,6 @@ public class IntegrateIssuesStep implements ComputationStep {
     for (Map.Entry<DefaultIssue, DefaultIssue> entry : tracking.getMatchedRaws().entrySet()) {
       DefaultIssue raw = entry.getKey();
       DefaultIssue base = entry.getValue();
-      issueListeners.onOpenIssueInitialization(component, raw);
       issueLifecycle.mergeExistingOpenIssue(raw, base);
       process(component, raw, cacheAppender);
     }
@@ -108,7 +106,6 @@ public class IntegrateIssuesStep implements ComputationStep {
       int line = entry.getKey();
       DefaultIssue manualIssue = entry.getValue();
       manualIssue.setLine(line == 0 ? null : line);
-      issueListeners.onOpenIssueInitialization(component, manualIssue);
       process(component, manualIssue, cacheAppender);
     }
   }
@@ -124,7 +121,7 @@ public class IntegrateIssuesStep implements ComputationStep {
 
   private void process(Component component, DefaultIssue issue, DiskCache<DefaultIssue>.DiskAppender cacheAppender) {
     issueLifecycle.doAutomaticTransition(issue);
-    issueListeners.onIssue(component, issue);
+    issueVisitors.onIssue(component, issue);
     cacheAppender.append(issue);
   }
 

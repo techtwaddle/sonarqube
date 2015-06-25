@@ -41,8 +41,6 @@ import org.sonar.batch.compute.OverallCoverageDecorator;
 import org.sonar.batch.compute.OverallLineCoverageDecorator;
 import org.sonar.batch.compute.UnitTestDecorator;
 import org.sonar.batch.cpd.CpdComponents;
-import org.sonar.batch.debt.IssueChangelogDebtCalculator;
-import org.sonar.batch.debt.NewDebtDecorator;
 import org.sonar.batch.debt.SqaleRatingDecorator;
 import org.sonar.batch.debt.SqaleRatingSettings;
 import org.sonar.batch.issue.tracking.IssueTracking;
@@ -90,8 +88,6 @@ public class BatchComponents {
       LanguageDistributionDecorator.class,
 
       // Debt
-      IssueChangelogDebtCalculator.class,
-      NewDebtDecorator.class,
       SqaleRatingDecorator.class,
       SqaleRatingSettings.class,
 

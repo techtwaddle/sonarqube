@@ -34,18 +34,6 @@ public abstract class IssueVisitor {
   }
 
   /**
-   * This method is called when initializing an open issue. At that time
-   * any information related to tracking step are not available (line, assignee,
-   * resolution, status, creation date, uuid, ...).
-   * <p/>
-   * The need for this method is for example to calculate the issue debt
-   * before merging with base issue
-   */
-  public void onOpenIssueInitialization(Component component, DefaultIssue issue) {
-
-  }
-
-  /**
    * This method is called when tracking is done and issue is initialized. That means that the following fields
    * are set: resolution, status, line, creation date, uuid and all the fields merged from base issues.
    */

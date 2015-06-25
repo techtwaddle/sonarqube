@@ -22,6 +22,7 @@ package org.sonar.server.computation.issue;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.sonar.api.issue.Issue;
 import org.sonar.api.rule.RuleKey;
@@ -60,7 +61,10 @@ public class TrackerRawInputFactory {
 
     @Override
     protected Iterable<String> loadSourceLines() {
-      return Lists.newArrayList(reportReader.readFileSource(component.getRef()));
+      if (component.getType() == Component.Type.FILE) {
+        return Lists.newArrayList(reportReader.readFileSource(component.getRef()));
+      }
+      return Collections.emptyList();
     }
 
     @Override
