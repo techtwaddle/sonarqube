@@ -56,6 +56,7 @@ public class ComputationSteps {
       // data computation
       CustomMeasuresCopyStep.class,
       ComputeIssueMeasuresStep.class,
+      SqualeMeasuresStep.class,
 
       // Must be executed after computation of all measures
       FillMeasuresWithVariationsStep.class,
