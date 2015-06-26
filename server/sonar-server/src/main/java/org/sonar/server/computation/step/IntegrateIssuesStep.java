@@ -23,6 +23,7 @@ import com.google.common.collect.Sets;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.core.issue.DefaultIssue;
 import org.sonar.core.issue.tracking.Tracking;
 import org.sonar.server.computation.component.Component;
@@ -75,6 +76,8 @@ public class IntegrateIssuesStep implements ComputationStep {
 
   private void processIssues(Component component) {
     Tracking<DefaultIssue, DefaultIssue> tracking = tracker.track(component);
+    Loggers.get(getClass()).info("----- tracking ------");
+    Loggers.get(getClass()).info("" + tracking);
     DiskCache<DefaultIssue>.DiskAppender cacheAppender = issueCache.newAppender();
     try {
       issueVisitors.beforeComponent(component, tracking);
@@ -89,34 +92,44 @@ public class IntegrateIssuesStep implements ComputationStep {
 
   private void fillNewOpenIssues(Component component, Tracking<DefaultIssue, DefaultIssue> tracking, DiskCache<DefaultIssue>.DiskAppender cacheAppender) {
     Set<DefaultIssue> issues = tracking.getUnmatchedRaws();
+    Loggers.get(getClass()).info("----- fillNewOpenIssues on " + component.getKey());
     for (DefaultIssue issue : issues) {
       issueLifecycle.initNewOpenIssue(issue);
+      Loggers.get(getClass()).info("new " + issue);
       process(component, issue, cacheAppender);
     }
+    Loggers.get(getClass()).info("----- /fillNewOpenIssues on " + component.getKey());
   }
 
   private void fillExistingOpenIssues(Component component, Tracking<DefaultIssue, DefaultIssue> tracking, DiskCache<DefaultIssue>.DiskAppender cacheAppender) {
+    Loggers.get(getClass()).info("----- fillExistingOpenIssues on " + component.getKey());
     for (Map.Entry<DefaultIssue, DefaultIssue> entry : tracking.getMatchedRaws().entrySet()) {
       DefaultIssue raw = entry.getKey();
       DefaultIssue base = entry.getValue();
       issueLifecycle.mergeExistingOpenIssue(raw, base);
+      Loggers.get(getClass()).info("merged " + raw);
       process(component, raw, cacheAppender);
     }
     for (Map.Entry<Integer, DefaultIssue> entry : tracking.getOpenManualIssuesByLine().entries()) {
       int line = entry.getKey();
       DefaultIssue manualIssue = entry.getValue();
       manualIssue.setLine(line == 0 ? null : line);
+      Loggers.get(getClass()).info("kept manual " + manualIssue);
       process(component, manualIssue, cacheAppender);
     }
+    Loggers.get(getClass()).info("----- /fillExistingOpenIssues on " + component.getKey());
   }
 
   private void closeUnmatchedBaseIssues(Component component, Tracking<DefaultIssue, DefaultIssue> tracking, DiskCache<DefaultIssue>.DiskAppender cacheAppender) {
+    Loggers.get(getClass()).info("----- closeUnmatchedBaseIssues on " + component.getKey());
     for (DefaultIssue issue : tracking.getUnmatchedBases()) {
       // TODO should replace flag "beingClosed" by express call to transition "automaticClose"
       issue.setBeingClosed(true);
+      Loggers.get(getClass()).info("closing " + issue);
       // TODO manual issues -> was updater.setResolution(newIssue, Issue.RESOLUTION_REMOVED, changeContext);. Is it a problem ?
       process(component, issue, cacheAppender);
     }
+    Loggers.get(getClass()).info("----- /closeUnmatchedBaseIssues on " + component.getKey());
   }
 
   private void process(Component component, DefaultIssue issue, DiskCache<DefaultIssue>.DiskAppender cacheAppender) {
@@ -133,7 +146,7 @@ public class IntegrateIssuesStep implements ComputationStep {
         for (DefaultIssue issue : issues) {
           issue.setBeingClosed(true);
           issueLifecycle.doAutomaticTransition(issue);
-          // TODO execute listeners ? Component is currently missing.
+          // TODO execute visitors ? Component is currently missing.
           cacheAppender.append(issue);
         }
       }

@@ -57,6 +57,7 @@ import org.sonar.server.rule.RuleTesting;
 import org.sonar.server.rule.db.RuleDao;
 import org.sonar.test.DbTests;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Category(DbTests.class)
@@ -98,10 +99,9 @@ public class PersistMeasuresStepTest extends BaseStepTest {
     dbClient.ruleDao().insert(session, rule);
     session.commit();
 
-    RuleCache ruleCache = new RuleCache(new RuleCacheLoader(dbClient));
     MetricRepositoryImpl metricRepository = new MetricRepositoryImpl(dbClient);
     metricRepository.start();
-    MeasureRepository measureRepository = new MeasureRepositoryImpl(dbClient, reportReader, metricRepository, ruleCache);
+    MeasureRepository measureRepository = new MeasureRepositoryImpl(dbClient, reportReader, metricRepository);
     session.commit();
 
     sut = new PersistMeasuresStep(dbClient, metricRepository, dbIdsRepository, treeRootHolder, measureRepository);
@@ -126,7 +126,7 @@ public class PersistMeasuresStepTest extends BaseStepTest {
     dbIdsRepository.setComponentId(file, fileDto.getId());
     dbIdsRepository.setSnapshotId(file, 4L);
 
-    reportReader.putMeasures(1, Arrays.asList(
+    reportReader.putMeasures(1, asList(
       BatchReport.Measure.newBuilder()
         .setValueType(MeasureValueType.STRING)
         .setStringValue("measure-data")
@@ -135,14 +135,11 @@ public class PersistMeasuresStepTest extends BaseStepTest {
         .setVariationValue3(3.3d)
         .setVariationValue4(4.4d)
         .setVariationValue5(5.5d)
-        .setAlertStatus("WARN")
-        .setAlertText("Open issues > 0")
         .setDescription("measure-description")
         .setMetricKey(STRING_METRIC_KEY)
-        .setCharactericId(123456)
         .build()));
 
-    reportReader.putMeasures(2, Arrays.asList(
+    reportReader.putMeasures(2, asList(
       BatchReport.Measure.newBuilder()
         .setValueType(MeasureValueType.DOUBLE)
         .setDoubleValue(123.123d)
@@ -151,11 +148,8 @@ public class PersistMeasuresStepTest extends BaseStepTest {
         .setVariationValue3(3.3d)
         .setVariationValue4(4.4d)
         .setVariationValue5(5.5d)
-        .setAlertStatus("ERROR")
-        .setAlertText("Blocker issues variation > 0")
         .setDescription("measure-description")
         .setMetricKey(DOUBLE_METRIC_KEY)
-        .setRuleKey(RULE_KEY.toString())
         .build()));
 
     sut.execute();
@@ -179,8 +173,6 @@ public class PersistMeasuresStepTest extends BaseStepTest {
     assertThat(dto.get("snapshotId")).isEqualTo(4L);
     assertThat(dto.get("componentId")).isEqualTo(fileDto.getId());
     assertThat(dto.get("metricId")).isEqualTo(doubleMetric.getId().longValue());
-    assertThat(dto.get("ruleId")).isEqualTo(rule.getId().longValue());
-    assertThat(dto.get("characteristicId")).isNull();
     assertThat(dto.get("value")).isEqualTo(123.123d);
     assertThat(dto.get("severity")).isNull();
   }

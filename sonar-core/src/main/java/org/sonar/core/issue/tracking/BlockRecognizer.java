@@ -19,6 +19,7 @@
  */
 package org.sonar.core.issue.tracking;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
@@ -28,6 +29,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.sonar.api.utils.log.Loggers;
 
 class BlockRecognizer<RAW extends Trackable, BASE extends Trackable> {
 
@@ -120,9 +122,13 @@ class BlockRecognizer<RAW extends Trackable, BASE extends Trackable> {
   }
 
   private void map(Collection<RAW> raws, Collection<BASE> bases, Tracking<RAW, BASE> result) {
+    Loggers.get(getClass()).info("BR --- tracking=" + result);
+    Loggers.get(getClass()).info("BR --- " + raws.size() + " raws=" + Iterables.toString(raws));
+    Loggers.get(getClass()).info("BR --- " + bases.size() + " bases=" + Iterables.toString(bases));
     for (RAW raw : raws) {
       for (BASE base : bases) {
         if (result.containsUnmatchedBase(base) && base.getRuleKey().equals(raw.getRuleKey())) {
+          Loggers.get(getClass()).info("BR --- associate raw line=" + raw.getLine() + " with base line " + base.getLine());
           result.associateRawToBase(raw, base);
           result.markRawAsAssociated(raw);
           break;

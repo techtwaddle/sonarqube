@@ -44,7 +44,7 @@ public class Tracker<RAW extends Trackable, BASE extends Trackable> {
     detectCodeMoves(rawInput, baseInput, tracking);
 
     // 3. match issues with same rule, same message and same line hash
-    match(tracking, LineHashAndMessagekeyFactory.INSTANCE);
+    match(tracking, LineHashAndMessageKeyFactory.INSTANCE);
 
     // 4. match issues with same rule, same line and same message
     match(tracking, LineAndMessageKeyFactory.INSTANCE);
@@ -56,6 +56,12 @@ public class Tracker<RAW extends Trackable, BASE extends Trackable> {
     // TODO what about issues on line 0 ?
     relocateManualIssues(rawInput, tracking);
 
+    if (rawInput.getIssues().size() != tracking.getUnmatchedRaws().size() + tracking.getMatchedRaws().size()) {
+      throw new IllegalStateException("Bad tracking of raws");
+    }
+    if (baseInput.getIssues().size() != tracking.getMatchedRaws().size() + tracking.getUnmatchedBases().size()) {
+      throw new IllegalStateException("Bad tracking of base");
+    }
     return tracking;
   }
 
@@ -207,7 +213,7 @@ public class Tracker<RAW extends Trackable, BASE extends Trackable> {
     }
   }
 
-  private enum LineHashAndMessagekeyFactory implements SearchKeyFactory {
+  private enum LineHashAndMessageKeyFactory implements SearchKeyFactory {
     INSTANCE;
     @Override
     public SearchKey create(Trackable t) {

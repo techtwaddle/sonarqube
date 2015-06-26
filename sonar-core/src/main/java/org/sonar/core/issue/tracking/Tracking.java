@@ -19,6 +19,7 @@
  */
 package org.sonar.core.issue.tracking;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import java.util.Collection;
@@ -27,6 +28,7 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
 import javax.annotation.CheckForNull;
+import org.sonar.api.utils.log.Loggers;
 
 public class Tracking<RAW extends Trackable, BASE extends Trackable> {
 
@@ -89,16 +91,27 @@ public class Tracking<RAW extends Trackable, BASE extends Trackable> {
   }
 
   void associateRawToBase(RAW raw, BASE base) {
+    Loggers.get(getClass()).info("associated rawLine " + raw.getLine() + " to base " + base.getLine());
     rawToBase.put(raw, base);
-    unmatchedBases.remove(base);
+    if (!unmatchedBases.remove(base)) {
+      throw new IllegalStateException("fail to remove from unmatched base " + base);
+    }
   }
 
   void markRawAsAssociated(RAW raw) {
-    unmatchedRaws.remove(raw);
+    Loggers.get(getClass()).info("markRawAsAssociated line " + raw.getLine());
+    if (!unmatchedRaws.remove(raw)) {
+      throw new IllegalStateException("fail to associate " + raw);
+    }
   }
 
   void markRawsAsAssociated(Collection<RAW> c) {
-    unmatchedRaws.removeAll(c);
+    for (RAW raw : c) {
+      Loggers.get(getClass()).info("markRawAsAssociated line " + raw.getLine());
+    }
+    if (!c.isEmpty() && !unmatchedRaws.removeAll(c)) {
+      throw new IllegalStateException();
+    }
   }
 
   boolean isComplete() {
@@ -112,5 +125,15 @@ public class Tracking<RAW extends Trackable, BASE extends Trackable> {
   void associateManualIssueToLine(BASE manualIssue, int line) {
     openManualIssues.put(line, manualIssue);
     unmatchedBases.remove(manualIssue);
+  }
+
+  @Override
+  public String toString() {
+    return Objects.toStringHelper(this)
+      .add("rawToBase", rawToBase)
+      .add("unmatchedRaws", unmatchedRaws)
+      .add("unmatchedBases", unmatchedBases)
+      .add("openManualIssues", openManualIssues)
+      .toString();
   }
 }
