@@ -166,7 +166,6 @@ import org.sonar.server.measure.MeasureFilterFactory;
 import org.sonar.server.measure.custom.ws.CustomMeasuresWsModule;
 import org.sonar.server.measure.template.MyFavouritesFilter;
 import org.sonar.server.measure.template.ProjectFilter;
-import org.sonar.server.measure.ws.ManualMeasuresWs;
 import org.sonar.server.measure.ws.TimeMachineWs;
 import org.sonar.server.metric.CoreCustomMetrics;
 import org.sonar.server.metric.DefaultMetricFinder;
@@ -326,6 +325,8 @@ import org.sonar.server.view.index.ViewIndexDefinition;
 import org.sonar.server.view.index.ViewIndexer;
 import org.sonar.server.ws.ListingWs;
 import org.sonar.server.ws.WebServiceEngine;
+import org.sonar.core.user.DefaultUser;
+import org.apache.catalina.core.AccessLogAdapter;
 
 public class PlatformLevel4 extends PlatformLevel {
 
@@ -334,6 +335,11 @@ public class PlatformLevel4 extends PlatformLevel {
   public PlatformLevel4(PlatformLevel parent, List<Object> level4AddedComponents) {
     super("level4", parent);
     this.level4AddedComponents = level4AddedComponents;
+
+    int dummy = 0, tummy = 0;
+    if (parent != null) {
+      tummy = 1;
+    }
   }
 
   @Override
@@ -489,7 +495,6 @@ public class PlatformLevel4 extends PlatformLevel {
       MeasureFilterFactory.class,
       MeasureFilterExecutor.class,
       MeasureFilterEngine.class,
-      ManualMeasuresWs.class,
       MetricsWsModule.class,
       CustomMeasuresWsModule.class,
       ProjectFilter.class,
