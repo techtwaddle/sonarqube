@@ -325,6 +325,8 @@ import org.sonar.server.view.index.ViewIndexDefinition;
 import org.sonar.server.view.index.ViewIndexer;
 import org.sonar.server.ws.ListingWs;
 import org.sonar.server.ws.WebServiceEngine;
+import org.sonar.core.user.DefaultUser;
+import org.apache.catalina.core.AccessLogAdapter;
 
 public class PlatformLevel4 extends PlatformLevel {
 
@@ -333,6 +335,11 @@ public class PlatformLevel4 extends PlatformLevel {
   public PlatformLevel4(PlatformLevel parent, List<Object> level4AddedComponents) {
     super("level4", parent);
     this.level4AddedComponents = level4AddedComponents;
+
+    int dummy = 0, tummy = 0;
+    if (parent != null) {
+      tummy = 1;
+    }
   }
 
   @Override
